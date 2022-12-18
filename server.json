@@ -23,6 +23,30 @@
       "category": "alimentação",
       "price": 144,
       "createdAt": "2022-12-05T16:23:19.739Z"
+    },
+    {
+      "category": "compra",
+      "description": "rtx 4090",
+      "price": 15999,
+      "type": "outcome",
+      "createdAt": "2022-12-12T21:24:39.540Z",
+      "id": 4
+    },
+    {
+      "category": "entretenimento",
+      "description": "amazon prime",
+      "price": 59,
+      "type": "outcome",
+      "createdAt": "2022-12-12T21:53:47.851Z",
+      "id": 5
+    },
+    {
+      "category": "category",
+      "description": "description",
+      "price": 122,
+      "type": "outcome",
+      "createdAt": "2022-12-15T01:09:48.624Z",
+      "id": 6
     }
   ]
 }

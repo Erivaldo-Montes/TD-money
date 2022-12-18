@@ -1,42 +1,57 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
+import * as Dialog from '@radix-ui/react-dialog'
+import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import {
   CloseButton,
   Content,
   Overlay,
   TransactionTypeButton,
   TransactionType,
-} from "./styles";
-import * as z from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from './styles'
+import * as z from 'zod'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TransactionsContext } from '../../contexts/transactionContext'
+import { useContextSelector } from 'use-context-selector'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
   price: z.number(),
   category: z.string(),
-  type: z.enum(["income", "outcome"]),
-});
+  type: z.enum(['income', 'outcome']),
+})
 
-type newTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
+type newTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
+  const  createTransaction  = useContextSelector(TransactionsContext, (context) => {
+    return context.createTransaction
+  })
+
   // control server para manipular compenentes controlled e criar o mesmo
   const {
     control,
     register,
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = useForm<newTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
     defaultValues: {
-      type: "income",
+      type: 'income',
     },
-  });
+  })
 
   async function handleCreateNewTransaction(data: newTransactionFormInputs) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
+    const { category, description, price, type } = data
+
+    await createTransaction({
+      category,
+      description,
+      price,
+      type,
+    })
+
+    reset()
   }
 
   return (
@@ -56,19 +71,19 @@ export function NewTransactionModal() {
 
         <form action="" onSubmit={handleSubmit(handleCreateNewTransaction)}>
           <input
-            {...register("description")}
+            {...register('description')}
             type="text"
             placeholder="Descrição"
             required
           />
           <input
-            {...register("price", { valueAsNumber: true })}
+            {...register('price', { valueAsNumber: true })}
             type="number"
             placeholder="Preço"
             required
           />
           <input
-            {...register("category")}
+            {...register('category')}
             type="text"
             placeholder="Categoria"
             required
@@ -80,12 +95,12 @@ export function NewTransactionModal() {
             name="type"
             // obten o propriedade fiels de dentro do props
             render={({ field }) => {
-              console.log(field);
+              console.log(field)
               return (
                 // radio group do radix possui um evento onValueChange que é chanado quando o valor do radio mudar
                 <TransactionType
                   onValueChange={
-                    field.onChange /* função que anota o valor do campo*/
+                    field.onChange /* função que anota o valor do campo */
                   }
                   value={field.value}
                 >
@@ -99,7 +114,7 @@ export function NewTransactionModal() {
                     Saída
                   </TransactionTypeButton>
                 </TransactionType>
-              );
+              )
             }}
           />
 
@@ -109,5 +124,5 @@ export function NewTransactionModal() {
         </form>
       </Content>
     </Dialog.Portal>
-  );
+  )
 }

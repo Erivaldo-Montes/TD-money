@@ -1,17 +1,19 @@
-import { useContext } from "react";
-import { Header } from "../../components/Header";
-import { Summary } from "../../components/Summary";
-import { TransactionsContext } from "../../contexts/transactionContext";
-import { dateFormatter, priceFormatter } from "../../utils/formatter";
-import { SearchForm } from "./components/SearchForm";
+import { useContextSelector } from 'use-context-selector'
+import { Header } from '../../components/Header'
+import { Summary } from '../../components/Summary'
+import { TransactionsContext } from '../../contexts/transactionContext'
+import { dateFormatter, priceFormatter } from '../../utils/formatter'
+import { SearchForm } from './components/SearchForm'
 import {
   TransactionsContainer,
   TransactionTable,
   PriceHighlight,
-} from "./styles";
+} from './styles'
 
 export function Transactions() {
-  const { transactions } = useContext(TransactionsContext);
+  const transactions = useContextSelector(TransactionsContext, (context) => {
+    return context.transactions
+  })
   return (
     <div>
       <Header />
@@ -27,7 +29,7 @@ export function Transactions() {
                   <td width="50%">{transaction.description}</td>
                   <td>
                     <PriceHighlight variant={transaction.type}>
-                      {transaction.type === "outcome" && "- "}
+                      {transaction.type === 'outcome' && '- '}
                       {priceFormatter.format(transaction.price)}
                     </PriceHighlight>
                   </td>
@@ -36,11 +38,11 @@ export function Transactions() {
                     {dateFormatter.format(new Date(transaction.createdAt))}
                   </td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </TransactionTable>
       </TransactionsContainer>
     </div>
-  );
+  )
 }
